@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lemon Lift — Lemonade to Your Door</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fffbea; --card:#ffffff; --ink:#2b2a1f; --muted:#7a7660;
+    --lemon:#ffd83d; --lemon-dark:#e9b800; --leaf:#3f8f4f; --sour:#c8e34a; --pink:#ff9fb2;
+    --line:#efe6c4; --shadow:0 10px 30px rgba(120,100,0,.12);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;
+    background-image:radial-gradient(circle at 10% 0%,#fff3b0 0,transparent 40%),radial-gradient(circle at 100% 30%,#f3ffd0 0,transparent 35%)}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1000px;margin:auto}
+  .logo{font-family:Fraunces,serif;font-weight:800;font-size:26px;display:flex;align-items:center;gap:8px}
+  .logo span{display:inline-block;animation:bob 3s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-4px) rotate(-8deg)}}
+  .who{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--muted)}
+  .badge{background:var(--leaf);color:#fff;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700}
+  main{max-width:1000px;margin:auto;padding:0 24px 60px}
+  .hero{text-align:center;padding:20px 0 30px}
+  .hero h1{font-family:Fraunces,serif;font-size:clamp(34px,6vw,58px);margin:0;line-height:1.05}
+  .hero p{color:var(--muted);font-size:18px;margin:12px 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:26px}
+  .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+  @media(max-width:780px){.grid{grid-template-columns:1fr}}
+  h2{font-family:Fraunces,serif;margin:0 0 16px;font-size:24px}
+  label{display:block;font-weight:700;font-size:14px;margin:16px 0 6px}
+  input,textarea{width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:12px;font:inherit;background:#fffdf4}
+  input:focus,textarea:focus{outline:none;border-color:var(--lemon-dark)}
+  .flavors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .flavor{border:2px solid var(--line);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;background:#fffdf4;transition:.15s}
+  .flavor:hover{transform:translateY(-2px)}
+  .flavor input{display:none}
+  .flavor .em{font-size:34px;display:block}
+  .flavor b{display:block;margin-top:4px}
+  .flavor small{color:var(--muted)}
+  .flavor.on{border-color:var(--ink);background:var(--lemon);box-shadow:0 4px 0 var(--ink)}
+  .flavor.on.sour{background:var(--sour)} .flavor.on.mixed{background:var(--pink)}
+  .addr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .addr label{margin-top:0}
+  .qty{display:flex;align-items:center;gap:10px}
+  .qty button{width:40px;height:40px;border-radius:12px;border:2px solid var(--ink);background:#fff;font-size:20px;cursor:pointer}
+  .qty output{font-weight:700;font-size:20px;min-width:30px;text-align:center}
+  .btn{display:inline-block;border:2px solid var(--ink);background:var(--lemon);color:var(--ink);font:700 16px "DM Sans";
+    padding:14px 22px;border-radius:14px;cursor:pointer;box-shadow:0 4px 0 var(--ink);transition:.1s}
+  .btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+  .btn.wide{width:100%;margin-top:22px;font-size:18px}
+  .btn.ghost{background:#fff;box-shadow:none;padding:8px 14px;font-size:14px}
+  .btn.green{background:var(--leaf);color:#fff}
+  .msg{margin-top:12px;font-weight:700;min-height:1em}
+  .err{color:#c0392b}
+  .order{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;background:#fffdf4}
+  .order .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .pill{font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px;text-transform:capitalize}
+  .pill.new{background:#fff0b3} .pill.on.the.way,.pill.way{background:#d8ecff} .pill.delivered{background:#d5f5d9}
+  .muted{color:var(--muted);font-size:14px}
+  .hidden{display:none!important}
+  dialog{border:none;border-radius:22px;padding:26px;max-width:380px;width:92%;box-shadow:var(--shadow)}
+  dialog::backdrop{background:rgba(40,35,0,.35)}
+  /* Admin */
+  .admin-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap}
+  .stat{background:#fffdf4;border:1px solid var(--line);border-radius:14px;padding:10px 16px}
+  .stat b{font-size:22px;display:block}
+  .admin-order{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;background:#fffdf4}
+  .admin-order.fresh{animation:flash 1.5s ease 3}
+  @keyframes flash{50%{background:var(--lemon)}}
+  .admin-order .big{font-size:30px}
+  .admin-order .where{font-weight:700;font-size:17px}
+  .actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  @media(max-width:600px){.admin-order{grid-template-columns:1fr}.actions{justify-content:flex-start}}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 20px;border-radius:14px;font-weight:700;box-shadow:var(--shadow);z-index:9}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><span>🍋</span> Lemon Lift</div>
+  <div class="who">
+    <span id="whoText">Ordering as guest</span>
+    <span id="adminBadge" class="badge hidden">ADMIN</span>
+    <button class="btn ghost" id="authBtn">Sign in</button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= CUSTOMER ================= -->
+  <section id="shop">
+    <div class="hero">
+      <h1>Fresh lemonade,<br>delivered upstairs.</h1>
+      <p>Pick your flavour, tell us your lobby, floor and unit — Magnus brings it to your door.</p>
+    </div>
+    <div class="grid">
+      <form class="card" id="orderForm">
+        <h2>Your order</h2>
+        <label>Flavour</label>
+        <div class="flavors">
+          <label class="flavor sweet on"><input type="radio" name="flavor" value="sweet" checked><span class="em">🍯</span><b>Sweet</b><small>Honey-smooth</small></label>
+          <label class="flavor sour"><input type="radio" name="flavor" value="sour"><span class="em">🍋</span><b>Sour</b><small>Extra zing</small></label>
+          <label class="flavor mixed"><input type="radio" name="flavor" value="mixed"><span class="em">🍹</span><b>Mixed</b><small>Best of both</small></label>
+        </div>
+
+        <label>How many cups?</label>
+        <div class="qty">
+          <button type="button" data-d="-1">−</button><output id="qty">1</output><button type="button" data-d="1">+</button>
+        </div>
+
+        <label>Deliver to</label>
+        <div class="addr">
+          <div><label for="lobby" class="muted">Lobby</label><input id="lobby" required placeholder="e.g. B"></div>
+          <div><label for="floor" class="muted">Floor</label><input id="floor" required placeholder="e.g. 12"></div>
+          <div><label for="unit" class="muted">Unit</label><input id="unit" required placeholder="e.g. 345"></div>
+        </div>
+
+        <div id="guestNameWrap">
+          <label for="guestName">Your name <span class="muted">(optional)</span></label>
+          <input id="guestName" placeholder="So Magnus knows who it's for">
+        </div>
+
+        <label for="note">Note for Magnus <span class="muted">(optional)</span></label>
+        <textarea id="note" rows="2" placeholder="Less ice, knock twice…"></textarea>
+
+        <button class="btn wide" type="submit">Place order 🍋</button>
+        <div class="msg" id="orderMsg"></div>
+      </form>
+
+      <aside class="card">
+        <h2>Your orders</h2>
+        <div id="myOrders"><p class="muted">No orders yet. Your first cup is one click away.</p></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ================= ADMIN (Magnus) ================= -->
+  <section id="admin" class="hidden">
+    <div class="card">
+      <div class="admin-head">
+        <h2 style="margin:0">Hi Magnus 👋 — delivery board</h2>
+        <div class="stats">
+          <div class="stat"><b id="sNew">0</b><span class="muted">New</span></div>
+          <div class="stat"><b id="sWay">0</b><span class="muted">On the way</span></div>
+          <div class="stat"><b id="sDone">0</b><span class="muted">Delivered</span></div>
+        </div>
+      </div>
+      <p class="muted" id="notifHint">New orders appear here instantly with a sound. <button class="btn ghost" id="notifBtn">Enable pop-up notifications</button></p>
+      <div id="adminOrders"></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="signin">
+  <form id="signinForm">
+    <h2>Sign in</h2>
+    <p class="muted">Optional — it just saves your name on orders.</p>
+    <label for="nameIn">Your name</label>
+    <input id="nameIn" required autocomplete="name">
+    <div id="pwWrap" class="hidden">
+      <label for="pwIn">Admin password</label>
+      <input id="pwIn" type="password">
+    </div>
+    <div class="msg err" id="signinErr"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn" type="submit">Sign in</button>
+      <button class="btn ghost" type="button" id="cancelSignin">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const FL = { sweet: ["🍯","Sweet"], sour: ["🍋","Sour"], mixed: ["🍹","Mixed"] };
+let me = null, cfg = {}, qty = 1, adminES = null;
+
+const api = async (url, opts = {}) => {
+  const r = await fetch(url, { headers: { "Content-Type": "application/json" }, ...opts });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.error || "Something went wrong"), j);
+  return j;
+};
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toast = (t) => { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 3500); };
+const time = (iso) => new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+// ---------- auth ----------
+async function refreshMe() {
+  me = await api("/api/me");
+  cfg = await api("/api/config");
+  $("#whoText").textContent = me ? `Hi, ${me.name}` : "Ordering as guest";
+  $("#authBtn").textContent = me ? "Sign out" : "Sign in";
+  $("#adminBadge").classList.toggle("hidden", !me?.isAdmin);
+  $("#guestNameWrap").classList.toggle("hidden", !!me);
+  $("#shop").classList.toggle("hidden", !!me?.isAdmin);
+  $("#admin").classList.toggle("hidden", !me?.isAdmin);
+  if (me?.isAdmin) startAdmin(); else stopAdmin();
+}
+$("#authBtn").onclick = async () => {
+  if (me) { await api("/api/signout", { method: "POST" }); return refreshMe(); }
+  $("#signinErr").textContent = ""; $("#pwWrap").classList.add("hidden"); $("#signin").showModal();
+};
+$("#cancelSignin").onclick = () => $("#signin").close();
+$("#nameIn").oninput = (e) => {
+  const isMagnus = e.target.value.trim().replace(/\s+/g, " ").toLowerCase() === "magnus yao";
+  $("#pwWrap").classList.toggle("hidden", !(isMagnus && cfg.adminPassword));
+};
+$("#signinForm").onsubmit = async (e) => {
+  e.preventDefault();
+  try {
+    await api("/api/signin", { method: "POST", body: JSON.stringify({ name: $("#nameIn").value, password: $("#pwIn").value }) });
+    $("#signin").close(); $("#pwIn").value = ""; refreshMe();
+  } catch (err) { $("#signinErr").textContent = err.message; if (err.needPassword) $("#pwWrap").classList.remove("hidden"); }
+};
+
+// ---------- order form ----------
+document.querySelectorAll(".flavor input").forEach((r) => r.onchange = () => {
+  document.querySelectorAll(".flavor").forEach((f) => f.classList.toggle("on", f.querySelector("input").checked));
+});
+document.querySelectorAll(".qty button").forEach((b) => b.onclick = () => {
+  qty = Math.max(1, Math.min(20, qty + Number(b.dataset.d))); $("#qty").textContent = qty;
+});
+$("#orderForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const msg = $("#orderMsg"); msg.className = "msg";
+  try {
+    const o = await api("/api/orders", { method: "POST", body: JSON.stringify({
+      flavor: document.querySelector(".flavor input:checked").value, qty,
+      lobby: $("#lobby").value, floor: $("#floor").value, unit: $("#unit").value,
+      note: $("#note").value, name: $("#guestName").value,
+    })});
+    const ids = JSON.parse(localStorage.getItem("myOrders") || "[]"); ids.push(o.id);
+    try { localStorage.setItem("myOrders", JSON.stringify(ids)); } catch {}
+    msg.textContent = `✅ Order #${o.id} sent to Magnus! He's on it.`;
+    $("#note").value = ""; loadMine();
+  } catch (err) { msg.className = "msg err"; msg.textContent = err.message; }
+};
+
+async function loadMine() {
+  let ids = []; try { ids = JSON.parse(localStorage.getItem("myOrders") || "[]"); } catch {}
+  if (!ids.length) return;
+  const list = await api("/api/orders/track?ids=" + ids.join(","));
+  $("#myOrders").innerHTML = list.reverse().map((o) => `
+    <div class="order"><div class="top"><b>#${o.id} · ${o.qty} × ${FL[o.flavor][0]} ${FL[o.flavor][1]}</b>
+    <span class="pill ${o.status === "on the way" ? "way" : o.status}">${o.status === "new" ? "sent to Magnus" : o.status}</span></div>
+    <div class="muted">Lobby ${esc(o.lobby)} · Floor ${esc(o.floor)} · Unit ${esc(o.unit)} · ${time(o.createdAt)}</div></div>`).join("");
+}
+const custES = new EventSource("/api/events/customer");
+custES.addEventListener("update", (e) => {
+  const u = JSON.parse(e.data);
+  let ids = []; try { ids = JSON.parse(localStorage.getItem("myOrders") || "[]"); } catch {}
+  if (ids.includes(u.id)) { loadMine(); if (u.status === "delivered") toast(`🍋 Order #${u.id} delivered — enjoy!`); else toast(`🚶 Magnus is on the way with order #${u.id}`); }
+});
+
+// ---------- admin ----------
+let adminOrders = [];
+function ding() {
+  try { const c = new AudioContext(); [880, 1320].forEach((f, i) => { const o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(.2, c.currentTime + i*.15);
+    g.gain.exponentialRampToValueAtTime(.001, c.currentTime + i*.15 + .3); o.start(c.currentTime + i*.15); o.stop(c.currentTime + i*.15 + .3); }); } catch {}
+}
+function renderAdmin(freshId) {
+  $("#sNew").textContent = adminOrders.filter((o) => o.status === "new").length;
+  $("#sWay").textContent = adminOrders.filter((o) => o.status === "on the way").length;
+  $("#sDone").textContent = adminOrders.filter((o) => o.status === "delivered").length;
+  $("#adminOrders").innerHTML = adminOrders.length ? adminOrders.map((o) => `
+    <div class="admin-order ${o.id === freshId ? "fresh" : ""}">
+      <div class="big">${FL[o.flavor][0]}</div>
+      <div>
+        <div class="where">Lobby ${esc(o.lobby)} · Floor ${esc(o.floor)} · Unit ${esc(o.unit)}</div>
+        <div>#${o.id} · <b>${o.qty} × ${FL[o.flavor][1]}</b> for ${esc(o.name)} · ${time(o.createdAt)}</div>
+        ${o.note ? `<div class="muted">📝 ${esc(o.note)}</div>` : ""}
+      </div>
+      <div class="actions">
+        <span class="pill ${o.status === "on the way" ? "way" : o.status}">${o.status}</span>
+        ${o.status === "new" ? `<button class="btn ghost" data-id="${o.id}" data-s="on the way">Start delivery</button>` : ""}
+        ${o.status !== "delivered" ? `<button class="btn ghost green" data-id="${o.id}" data-s="delivered">Delivered ✓</button>` : ""}
+      </div>
+    </div>`).join("") : `<p class="muted">No orders yet. Sit tight — thirsty neighbours incoming.</p>`;
+}
+$("#adminOrders").onclick = async (e) => {
+  const b = e.target.closest("button[data-id]"); if (!b) return;
+  await api(`/api/orders/${b.dataset.id}/status`, { method: "POST", body: JSON.stringify({ status: b.dataset.s }) });
+};
+async function startAdmin() {
+  if (adminES) return;
+  adminOrders = await api("/api/orders"); renderAdmin();
+  adminES = new EventSource("/api/events/admin");
+  adminES.addEventListener("new-order", (e) => {
+    const o = JSON.parse(e.data); adminOrders.unshift(o); renderAdmin(o.id); ding();
+    const text = `${o.qty} × ${FL[o.flavor][1]} → Lobby ${o.lobby}, Floor ${o.floor}, Unit ${o.unit}`;
+    toast("📨 New order! " + text);
+    if ("Notification" in window && Notification.permission === "granted") new Notification(`🍋 Order #${o.id} for Magnus`, { body: text });
+  });
+  adminES.addEventListener("update", (e) => {
+    const u = JSON.parse(e.data); adminOrders = adminOrders.map((o) => o.id === u.id ? u : o); renderAdmin();
+  });
+}
+function stopAdmin() { if (adminES) { adminES.close(); adminES = null; } }
+$("#notifBtn").onclick = async () => {
+  if (!("Notification" in window)) return toast("This browser doesn't support notifications");
+  const p = await Notification.requestPermission(); toast(p === "granted" ? "Notifications on 🔔" : "Notifications blocked");
+};
+
+refreshMe(); loadMine();
+</script>
+</body>
+</html>

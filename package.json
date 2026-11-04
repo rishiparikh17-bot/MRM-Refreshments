@@ -1,0 +1,15 @@
+{
+  "name": "lemonade-shop",
+  "version": "1.0.0",
+  "description": "Order lemonade (sweet, sour or mixed) delivered to your lobby, floor and unit. Magnus Yao gets every order live.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
